@@ -1,0 +1,36 @@
+{
+  "name": "bookstore-api",
+  "version": "1.0.0",
+  "description": "Online bookstore API",
+  "main": "dist/server.js",
+  "scripts": {
+    "dev": "ts-node-dev --respawn --transpile-only src/server.ts",
+    "build": "tsc",
+    "start": "node dist/server.js",
+    "test": "jest --runInBand"
+  },
+  "dependencies": {
+    "express": "^4.21.0",
+    "sequelize": "^6.37.0",
+    "sequelize-typescript": "^2.1.6",
+    "mysql2": "^3.11.0",
+    "dotenv": "^16.4.5",
+    "helmet": "^8.0.0",
+    "cors": "^2.8.5",
+    "morgan": "^1.10.0",
+    "express-validator": "^7.2.1",
+    "swagger-ui-express": "^5.0.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.5.4",
+    "@types/cors": "^2.8.17",
+    "@types/morgan": "^1.9.7",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "typescript": "^5.4.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.5",
+    "@types/jest": "^29.5.12"
+  }
+}
