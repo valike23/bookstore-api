@@ -27,7 +27,7 @@ export class CartRepository {
   }
 
   async createCartItem(cartId: number, bookId: number, quantity: number) {
-    return CartItem.create({ cartId, bookId, quantity });
+    return CartItem.create({ cartId, bookId, quantity } as any);
   }
 
   async updateCartItemQuantity(cartItemId: number, quantity: number) {
