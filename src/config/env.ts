@@ -3,6 +3,9 @@ dotenv.config();
 
 function requireEnv(name: string, fallback?: string): string {
   const value = process.env[name] ?? fallback;
+  if(name === 'DB_PASS' && value === '') {
+    return '';
+  }
   if (!value) {
     throw new Error(`Missing required env var: ${name}`);
   }
