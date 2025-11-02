@@ -1,8 +1,8 @@
 
 import 'reflect-metadata';
-import { sequelize } from '../config/db';
-import { Book, Customer, CartItem, Cart } from '../model';
-import { OrderService } from '../modules/orders/order.service';
+import { sequelize } from '../../config/db';
+import { Book, Customer, CartItem, Cart } from '../../model';
+import { OrderService } from '../../modules/orders/order.service';
 
 describe('OrderService.checkout', () => {
   beforeAll(async () => {

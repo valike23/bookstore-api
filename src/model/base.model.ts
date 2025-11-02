@@ -1,16 +1,15 @@
+
+import { CreationOptional } from 'sequelize';
 import {
   Model,
-  Column,
-  DataType,
-  PrimaryKey,
-  AutoIncrement,
-  Table,
 } from 'sequelize-typescript';
 
 
-export abstract class BaseModel<T extends {} = any> extends Model<T> {
-  @PrimaryKey
-  @AutoIncrement
-  @Column(DataType.INTEGER) 
-  declare id: number;
+export abstract class BaseModel<
+  TAttributes extends {} = any,
+  TCreation extends {} = any
+> extends Model<TAttributes, TCreation> {
+  declare id: CreationOptional<number>;
+  declare createdAt: CreationOptional<Date>;
+  declare updatedAt: CreationOptional<Date>;
 }

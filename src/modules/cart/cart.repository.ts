@@ -1,25 +1,24 @@
-import { Book, CartItem ,Cart} from "../../model";
-
-
+import { Cart, CartItem, Book } from '../../model';
 
 export class CartRepository {
   async findOrCreateCart(customerId: number) {
     const [cart] = await Cart.findOrCreate({
       where: { customerId },
-      defaults: { customerId } as any,
+      defaults: { customerId },
     });
     return cart;
   }
 
   async findCartWithItems(cartId: number) {
     return Cart.findByPk(cartId, {
-      include: [
-        {
-          model: CartItem,
-          include: [{ model: Book, attributes: ['id', 'title', 'price'] }],
-        },
-      ],
-    });
+  include: [
+    {
+      model: CartItem,
+      as: 'items',
+      include: [{ model: Book, as: 'book', attributes: ['id', 'title', 'price'] }],
+    },
+  ],
+});
   }
 
   async findCartItem(cartId: number, bookId: number) {
@@ -27,7 +26,7 @@ export class CartRepository {
   }
 
   async createCartItem(cartId: number, bookId: number, quantity: number) {
-    return CartItem.create({ cartId, bookId, quantity } as any);
+    return CartItem.create({ cartId, bookId, quantity });
   }
 
   async updateCartItemQuantity(cartItemId: number, quantity: number) {

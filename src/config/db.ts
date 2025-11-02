@@ -1,6 +1,6 @@
 import { Sequelize } from 'sequelize-typescript';
 import { ENV } from './env';
-import { MODELS } from '../model';
+import { initAssociations, MODELS } from '../model';
 export const sequelize = new Sequelize({
   database: ENV.DB_NAME,
   username: ENV.DB_USER,
@@ -12,4 +12,4 @@ export const sequelize = new Sequelize({
   logging: ENV.NODE_ENV === 'development' ? console.log : false,
 });
 
-
+initAssociations();

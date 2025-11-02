@@ -18,28 +18,36 @@ import { TransactionLog } from './transaction.model';
 export const MODELS = [Book, Customer, Cart, CartItem, Order, OrderItem, TransactionLog];
 
 export function initAssociations() {
+  // Customer 1--1 Cart
+  Customer.hasOne(Cart, { foreignKey: 'customerId', as: 'cart' });
+  Cart.belongsTo(Customer, { foreignKey: 'customerId', as: 'customer' });
 
-  Customer.hasOne(Cart, { foreignKey: 'customerId' });
-  Cart.belongsTo(Customer, { foreignKey: 'customerId' });
+  // Cart 1--many CartItem
+  Cart.hasMany(CartItem, { foreignKey: 'cartId', as: 'items' });
+  CartItem.belongsTo(Cart, { foreignKey: 'cartId', as: 'cart' });
 
-  Cart.hasMany(CartItem, { foreignKey: 'cartId' });
-  CartItem.belongsTo(Cart, { foreignKey: 'cartId' });
+  // Book 1--many CartItem
+  Book.hasMany(CartItem, { foreignKey: 'bookId', as: 'cartItems' });
+  CartItem.belongsTo(Book, { foreignKey: 'bookId', as: 'book' });
 
-  Book.hasMany(CartItem, { foreignKey: 'bookId' });
-  CartItem.belongsTo(Book, { foreignKey: 'bookId' });
+  // Customer 1--many Order
+  Customer.hasMany(Order, { foreignKey: 'customerId', as: 'orders' });
+  Order.belongsTo(Customer, { foreignKey: 'customerId', as: 'customer' });
 
-  Customer.hasMany(Order, { foreignKey: 'customerId' });
-  Order.belongsTo(Customer, { foreignKey: 'customerId' });
+  // Order 1--many OrderItem
+  Order.hasMany(OrderItem, { foreignKey: 'orderId', as: 'items' });
+  OrderItem.belongsTo(Order, { foreignKey: 'orderId', as: 'order' });
 
-  Order.hasMany(OrderItem, { foreignKey: 'orderId' });
-  OrderItem.belongsTo(Order, { foreignKey: 'orderId' });
+  // Book 1--many OrderItem
+  Book.hasMany(OrderItem, { foreignKey: 'bookId', as: 'orderItems' });
+  OrderItem.belongsTo(Book, { foreignKey: 'bookId', as: 'book' });
 
-  Book.hasMany(OrderItem, { foreignKey: 'bookId' });
-  OrderItem.belongsTo(Book, { foreignKey: 'bookId' });
+  // Order 1--1 TransactionLog
+  Order.hasOne(TransactionLog, { foreignKey: 'orderId', as: 'transaction' });
+  TransactionLog.belongsTo(Order, { foreignKey: 'orderId', as: 'order' });
 
-  Order.hasOne(TransactionLog, { foreignKey: 'orderId' });
-  TransactionLog.belongsTo(Order, { foreignKey: 'orderId' });
-
-  Customer.hasMany(TransactionLog, { foreignKey: 'customerId' });
-  TransactionLog.belongsTo(Customer, { foreignKey: 'customerId' });
+  // Customer 1--many TransactionLog
+  Customer.hasMany(TransactionLog, { foreignKey: 'customerId', as: 'transactions' });
+  TransactionLog.belongsTo(Customer, { foreignKey: 'customerId', as: 'customer' });
 }
+

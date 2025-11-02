@@ -1,8 +1,17 @@
-import { Table, Column, DataType, AllowNull, Default } from 'sequelize-typescript';
+
+import {
+  Table, Column, DataType, AllowNull, Default,
+} from 'sequelize-typescript';
+import {
+  InferAttributes, InferCreationAttributes,
+} from 'sequelize';
 import { BaseModel } from './base.model';
 
 @Table({ tableName: 'books', timestamps: true })
-export class Book extends BaseModel<Book> {
+export class Book extends BaseModel<
+  InferAttributes<Book>,
+  InferCreationAttributes<Book>
+> {
   @AllowNull(false)
   @Column(DataType.STRING(255))
   declare title: string;
@@ -17,7 +26,7 @@ export class Book extends BaseModel<Book> {
 
   @AllowNull(false)
   @Column(DataType.DECIMAL(10, 2))
-  declare price: string; // DECIMAL in MySQL -> string in JS
+  declare price: string;
 
   @AllowNull(false)
   @Default(0)

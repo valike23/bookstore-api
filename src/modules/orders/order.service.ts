@@ -18,12 +18,12 @@ export class OrderService {
       const cart = await Cart.findOne({ where: { customerId }, transaction: t, lock: t.LOCK.UPDATE });
       if (!cart) throw new AppError(400, 'Cart is empty');
 
-      const items = await CartItem.findAll({
-        where: { cartId: cart.id },
-        include: [{ model: Book }],
-        transaction: t,
-        lock: t.LOCK.UPDATE, // lock cart items to avoid concurrent mutation
-      });
+     const items = await CartItem.findAll({
+  where: { cartId: cart.id },
+  include: [{ model: Book, as: 'book' }], 
+  transaction: t,
+  lock: t.LOCK.UPDATE,
+});
 
       if (!items.length) throw new AppError(400, 'Cart is empty');
 
@@ -102,24 +102,33 @@ export class OrderService {
     });
   }
 
-  async history(customerId: number) {
-    const orders = await Order.findAll({
-      where: { customerId },
-      include: [{ model: OrderItem }],
-      order: [['createdAt', 'DESC']],
-    });
+ async history(customerId: number) {
+  const orders = await Order.findAll({
+    where: { customerId },
+    include: [
+      {
+        model: OrderItem,
+        as: 'items',                    // <- alias
+        include: [{ model: Book, as: 'book' }], // <- alias
+      },
+    ],
+    order: [['createdAt', 'DESC']],
+  });
 
-    return orders.map((o) => ({
-      orderId: o.id,
-      status: o.status,
-      total: parseFloat(o.totalAmount),
-      createdAt: o.createdAt,
-      items: (o as any).OrderItems?.map((oi: any) => ({
-        bookId: oi.bookId,
-        quantity: oi.quantity,
-        unitPrice: parseFloat(oi.unitPrice),
-        subtotal: parseFloat(oi.subtotal),
-      })) ?? [],
-    }));
-  }
+  return orders.map((o) => ({
+    orderId: o.id,
+    status: o.status,
+    total: parseFloat(o.totalAmount),
+    createdAt: o.createdAt,
+    items: (o as any).items?.map((oi: any) => ({
+      bookId: oi.bookId,
+      // book is included with alias 'book'
+      title: oi.book?.title,
+      quantity: oi.quantity,
+      unitPrice: parseFloat(oi.unitPrice),
+      subtotal: parseFloat(oi.subtotal),
+    })) ?? [],
+  }));
+}
+
 }
